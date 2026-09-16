@@ -10,7 +10,7 @@ locals {
     OtherProjects = "MyLibraryNyc"
   }
 
-  log_metric_name = "${var.function_name}Error-${var.environment}"
+  log_metric_name = "${var.function_name}LogError-${var.environment}"
 }
 
 variable "environment" {
@@ -105,7 +105,7 @@ resource "aws_cloudwatch_log_metric_filter" "error_metric_filter" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda_log_errors" {
-  alarm_name          = "lambda-log-errors-${aws_lambda_function.lambda_instance.function_name}"
+  alarm_name          = "${var.function_name}LogErrorAlarm-${var.environment}"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = local.log_metric_name
@@ -125,7 +125,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_log_errors" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
-  alarm_name          = "lambda-errors-${aws_lambda_function.lambda_instance.function_name}"
+  alarm_name          = "${var.function_name}LambdaErrorAlarm-${var.environment}"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = "Errors"
@@ -134,6 +134,26 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   statistic           = "Sum"
   threshold           = 1
   alarm_description   = "Lambda function ${aws_lambda_function.lambda_instance.function_name} has more than 1 error in 5 minutes"
+  alarm_actions       = [data.aws_sns_topic.rc_alarms.arn]
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    FunctionName = aws_lambda_function.lambda_instance.function_name
+  }
+
+  tags = local.tags
+}
+
+resource "aws_cloudwatch_metric_alarm" "kinesis_iterator_age" {
+  alarm_name          = "${var.function_name}KinesisIteratorAgeAlarm-${var.environment}"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "IteratorAge"
+  namespace           = "AWS/Lambda"
+  period              = 60
+  statistic           = "Maximum"
+  threshold           = 3600000 # 1 hour
+  alarm_description   = "Triggered when Kinesis iterator age of lambda function ${aws_lambda_function.lambda_instance.function_name} exceeds 1 hour"
   alarm_actions       = [data.aws_sns_topic.rc_alarms.arn]
   treat_missing_data  = "notBreaching"
 
