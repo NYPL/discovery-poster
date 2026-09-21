@@ -94,7 +94,7 @@ data "aws_sns_topic" "rc_alarms" {
 
 resource "aws_cloudwatch_log_metric_filter" "error_metric_filter" {
   name           = local.log_metric_name
-  pattern        = "{ $.level = error }"
+  pattern        = "{ $.level = \"error\" }"
   log_group_name = "/aws/lambda/${aws_lambda_function.lambda_instance.function_name}"
 
   metric_transformation {
