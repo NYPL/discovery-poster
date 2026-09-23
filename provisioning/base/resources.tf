@@ -106,7 +106,7 @@ resource "aws_cloudwatch_log_metric_filter" "error_metric_filter" {
 
 resource "aws_cloudwatch_metric_alarm" "lambda_log_errors" {
   alarm_name          = "${var.function_name}LogErrorAlarm-${var.environment}"
-  comparison_operator = "GreaterThanThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = local.log_metric_name
   namespace           = "LogMetrics"
@@ -126,7 +126,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_log_errors" {
 
 resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   alarm_name          = "${var.function_name}LambdaErrorAlarm-${var.environment}"
-  comparison_operator = "GreaterThanThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "Errors"
   namespace           = "AWS/Lambda"
