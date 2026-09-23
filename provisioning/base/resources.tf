@@ -113,7 +113,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_log_errors" {
   period              = 300
   statistic           = "Sum"
   threshold           = 1
-  alarm_description   = "Lambda function ${aws_lambda_function.lambda_instance.function_name} has more than 1 error log in 5 minutes"
+  alarm_description   = "Lambda function ${aws_lambda_function.lambda_instance.function_name} has error logs"
   alarm_actions       = [data.aws_sns_topic.rc_alarms.arn]
   treat_missing_data  = "notBreaching"
 
@@ -133,7 +133,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   period              = 300
   statistic           = "Sum"
   threshold           = 1
-  alarm_description   = "Lambda function ${aws_lambda_function.lambda_instance.function_name} has more than 1 error in 5 minutes"
+  alarm_description   = "Lambda function ${aws_lambda_function.lambda_instance.function_name} has invocation errors"
   alarm_actions       = [data.aws_sns_topic.rc_alarms.arn]
   treat_missing_data  = "notBreaching"
 
