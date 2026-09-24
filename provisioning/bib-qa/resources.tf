@@ -9,13 +9,6 @@ terraform {
     key     = "bib-poster-qa-state"
     region  = "us-east-1"
   }
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 6.64.0"
-    }
-  }
 }
 
 module "base" {

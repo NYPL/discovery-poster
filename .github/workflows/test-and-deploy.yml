@@ -33,6 +33,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v2
       - name: Deploy app to QA
         run: |
+          export TF_LOG=DEBUG
           terraform -chdir=provisioning/bib-qa init -input=false
           terraform -chdir=provisioning/bib-qa apply -auto-approve -input=false
           terraform -chdir=provisioning/item-qa init -input=false
