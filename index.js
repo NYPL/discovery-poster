@@ -143,7 +143,7 @@ exports.kinesisHandler = async function (records) {
     try {
       resp = await exports._fetch(NYPL_API_SCHEMA_URL)
     } catch (error) {
-      logger.info({'message': 'Error! ' + error})
+      logger.error({'message': 'Error! ' + error})
       throw error
     }
 
