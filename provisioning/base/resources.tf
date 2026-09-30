@@ -126,7 +126,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_log_errors" {
 
 resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   alarm_name          = "${var.function_name}LambdaErrorAlarm-${var.environment}"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
+  comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = "Errors"
   namespace           = "AWS/Lambda"
